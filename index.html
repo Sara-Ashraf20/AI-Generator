@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Course Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>AI Course Description Generator</h1>
+    
+    <div class="form-group">
+        <label for="title">Course Title*</label>
+        <input type="text" id="title" placeholder="Python for Beginners" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="category">Course Category*</label>
+        <input type="text" id="category" placeholder="Programming" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="language">Language</label>
+        <select id="language">
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+        </select>
+    </div>
+    
+    <button id="generate-btn">Generate Description</button>
+    
+    <div id="loading">Generating description, please wait...</div>
+    <div id="error" class="error"></div>
+    
+    <div class="form-group">
+        <label for="description">Course Description</label>
+        <textarea id="description" readonly></textarea>
+    </div>
+
+    <script>
+        document.getElementById('generate-btn').addEventListener('click', generateDescription);
+        
+        async function generateDescription() {
+            const title = document.getElementById('title').value.trim();
+            const category = document.getElementById('category').value.trim();
+            const language = document.getElementById('language').value;
+            const btn = document.getElementById('generate-btn');
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const description = document.getElementById('description');
+            
+            // Reset UI
+            error.style.display = 'none';
+            description.value = '';
+            btn.disabled = true;
+            loading.style.display = 'block';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        category: category,
+                        language: language
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `Server error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                description.value = data.description;
+                
+            } catch (err) {
+                error.textContent = err.message || 'Failed to connect to server';
+                error.style.display = 'block';
+                console.error('Error:', err);
+            } finally {
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
