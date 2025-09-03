@@ -16,8 +16,13 @@ Users provide a **title**, **category**, and **language** (**English, French, or
 
 ## 📂 Project Structure  
 ├── index.html
+|
 ├── style.css
-├── main.py 
+|
+├── main.py
+|
 ├── .env 
+|
 ├── requirements.txt 
+|
 └── README.md 
