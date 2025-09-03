@@ -15,14 +15,11 @@ Users provide a **title**, **category**, and **language** (**English, French, or
 ---
 
 ## 📂 Project Structure  
-├── index.html
-|
-├── style.css
-|
-├── main.py
-|
-├── .env 
-|
-├── requirements.txt 
-|
-└── README.md 
+├── index.html        
+├── style.css          
+├── main.py            
+├── .env                
+├── requirements.txt   
+├── README.md           
+└── .gitignore          
+
